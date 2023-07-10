@@ -33,6 +33,13 @@ int main(int argc, char *argv[])
         "Update and overwrite the existing mesh useful for adaptive mesh refinement"
     );
 
+    argList::addOption
+    (
+        "freeSurfaceField", 
+        "alpha.air",
+        "Name of the fluid phase where constant pressure in applied.\nDefault: alpha.air" 
+    ); 
+
     #include "postProcess.H"
 
     #include "addCheckCaseOptions.H"

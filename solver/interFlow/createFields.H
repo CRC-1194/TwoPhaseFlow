@@ -148,6 +148,4 @@ autoPtr<advectionSchemes> advector
 );
 
 
-
-
-
+volScalarField marker("marker", alpha1);

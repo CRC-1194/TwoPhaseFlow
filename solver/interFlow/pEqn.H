@@ -40,12 +40,19 @@
     // Update the pressure BCs to ensure flux consistency
     constrainPressure(p_rgh, U, phiHbyA, rAUf, MRF);
 
+
     while (pimple.correctNonOrthogonal())
     {
         fvScalarMatrix p_rghEqn
         (
             fvm::laplacian(rAUf, p_rgh) == fvc::div(phiHbyA)
         );
+
+        if (args.found("freeSurfaceField"))
+        {
+            Info << "Applying free surface pressure." << endl;
+            #include "setFreeSurfacePressure.H"
+        }
 
         p_rghEqn.setReference(pRefCell, getRefCellValue(p_rgh, pRefCell));
 
@@ -54,6 +61,10 @@
         if (pimple.finalNonOrthogonalIter())
         {
             phi = phiHbyA - p_rghEqn.flux();
+
+            // TODO(TM): Remove, debugging.
+            phiHbyA.write();
+            p_rghEqn.flux()->write();
 
             p_rgh.relax();
 
